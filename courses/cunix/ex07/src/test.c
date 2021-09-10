@@ -5,10 +5,10 @@
 #include "linked_list.h"
 #include <assert.h>
 
-void printInt(void *data)
-{
-  printf("%s\n", data);
-}
+//void printInt(void *data)
+//{
+//  printf("%s\n", data);
+//}
 
 void test_destroy_push(void *data)
 {

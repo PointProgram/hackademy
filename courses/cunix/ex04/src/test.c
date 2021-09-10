@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
-#include "test.h"
+#include "../include/test.h"
 
 void   test_small()
 {
