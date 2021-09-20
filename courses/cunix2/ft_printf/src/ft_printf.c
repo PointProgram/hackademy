@@ -65,6 +65,10 @@ specifiers specifiers_init(specifiers spec)
 int my_strlen(char *s)
 {
     int i = 0;
+    if (s == NULL)
+    {
+	    return 0;
+    }
     while(s[i])
     {
         i++;
@@ -138,6 +142,10 @@ char *gt_ln(const char* s, int start, int len)
 char *concat(char *s1, char *s2)
 {
     int ln = 0, s_len = my_strlen(s1);
+    if (s2 == NULL)
+    {
+	return NULL;
+    }
     while(s2[ln])
     {
         ln++;
@@ -167,16 +175,21 @@ char *convert_type(specifiers specs, void *el)
             s = (char *)malloc(2* sizeof(char));
             s[0] = *(char *)el;
             s[1] = '\0';
-            printf("{Urt %c}\n", *(char *)el);
+            //printf("{Urt %c}\n", *(char *)el);
             break;
         case 's':
             s = (char *)el;
-            printf("{Urt %s}\n", (char *)el);
+	    if (s == NULL)
+	    {
+	    	s = (char *)malloc(6*sizeof(char) + 1);
+	   	s = "(null)";
+	    }
+            //printf("{Urt %s}\n", (char *)el);
             break;
         case 'd':
         case 'i':
             s = my_itoa((*(int *)el));
-            printf("{Urt %d}\n", *(int *)el);
+            //printf("{Urt %d}\n", *(int *)el);
             break;
     }
     char chr;
@@ -192,20 +205,24 @@ char *convert_type(specifiers specs, void *el)
         int i = 1;
         if (llls > 0)
             ps = (char *)malloc(specs.width * sizeof(char) + 1);
-        else if(specs.flag[1] || specs.flag[2])
+        else if((specs.flag[1] || specs.flag[2]) && s[0] != '-')
         {
             ps = (char *)malloc(sizeof(char) + 1);
             llls++;
         }
-        if(specs.flag[1] || (specs.flag[1] && !specs.flag[2]))
+        if((specs.flag[1] || (specs.flag[1] && !specs.flag[2])) && ps[0] != '-')
         {
-            ps[0] = '+';
-           
+           ps[0] = '+';
         }
-        else if (specs.flag[2] && !specs.flag[1])
+        else if (specs.flag[2] && !specs.flag[1] && s[0] != '-')
         {
             ps[0] = ' ';
         }
+	else if (specs.flag[0] && s[0] == '-' && llls > 0)
+	{
+		ps[0] = '-';
+		s[0] = '0';
+	}
         else
         {
             i = 0;
@@ -279,17 +296,15 @@ int ft_printf(const char *format, ...)
     va_start(arg_list, format);
     int i = 0, num;
     format_code = format;
-    //get_s[0] = '\0';
+    get_s[0] = '\0';
     while (format_code[i])
     {
         num = get_index(format_code, '%', i);
-        char *wtf = gt_ln(format_code, i, num);
         get_s = concat(get_s, gt_ln(format_code, i, num));
         specifiers spec = specifiers_init(spec);
         i = num;
         if (format_code[num] != '\0')
         {
-            int ind = num;
             i++;
             
             if(format_code[i] == '%')
@@ -298,12 +313,26 @@ int ft_printf(const char *format, ...)
                 i++;
                 continue;
             }
+	    else
+	    {
+		    int j = i;
+		    while(format_code[j] >= '0' && format_code[j] <= '9')
+		    {
+			    j++;
+		    }
+		    if(format_code[j] == '%')
+		    {
+			    get_s = concat(get_s, "%");
+			    i = j+1;
+			    continue;
+		    }
 
+	    }
             spec = check_flag(spec, format_code, &i);
 
             if(format_code[i] > '0' && format_code[i] <= '9')
             {
-                int len = 1, beg = i;
+                int len = 1;
                 i++;
                 
                 while (format_code[i] >= '0' && format_code[i] <= '9')
@@ -353,8 +382,8 @@ int ft_printf(const char *format, ...)
                 //printf("\niii format %d\n", iii);
                 conv = convert_type(spec, &iii);
                 i++;
-            }
-            get_s = concat(get_s, conv);
+	    }
+		get_s = concat(get_s, conv);
         }
         
         //i++;
