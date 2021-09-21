@@ -13,6 +13,7 @@ int ft_tolower (int ch);
 int ft_abs (int x);
 div_t ft_div(int numer, int denom);
 char *ft_strstr (const char *haystack, const char *needle);
+char *ft_strnstr (const char *haystack, const char *needle, size_t n);
 void *ft_memset (void *str, int c, size_t n);
 void *ft_memcpy (void *dest, const void *src, size_t n);
 int ft_memcmp (const void *str1, const void * str2, size_t n);

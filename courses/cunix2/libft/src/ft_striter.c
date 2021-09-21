@@ -1,9 +1,10 @@
 #include "../libft.h"
 
-void ft_striter (char *s, void (*f)(char *))
+void ft_striter(char *s, void (*f)(char *))
 {
-	for (int i = 0; s[i] != '\0'; i++)
-	{
-		f((char *) &s[i]);
-	}
+    int i = 0;
+    while (s[i])
+    {
+        f((char *)&s[i++]);
+    }
 }
