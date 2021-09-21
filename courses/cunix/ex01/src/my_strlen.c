@@ -1,10 +1,10 @@
 #include "../include/test.h"
 
 unsigned int my_strlen(char* str) {
-	unsigned int len = 0;
+	unsigned int i = 0;
 
-	for(unsigned int index_len = 0; str[index_len] != '\0'; index_len++) {
-		len++;
+	while(str[i]) {
+		i++;
 	}
-	return len;
+	return i;
 }

@@ -2,10 +2,11 @@
 
 void ft_bzero(void *s, size_t n)
 {
-	char *array = (char *)s;
-	for(size_t i = 0; i < n; i++)
-	{
-		array[i] = '\0';
-	}
-	s = &array;
+    char *array = (char *)s;
+    size_t i = 0;
+    while (i < n)
+    {
+        array[i++] = '\0';
+    }
+    s = &array;
 }
